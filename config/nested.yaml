@@ -57,7 +57,28 @@ prewxvx:
         <<: *prewxvx-common
         output_path: '{{ val.vx.rundir }}/postprocessed_files/{{ prewxvx.lam.prewxvx.name }}'
         model_type: nested-lam
+        vars_of_interest: !list '{{ (vx.common.wxvx.variables.keys() | list) + ["accum_tp"] }}'
       rundir: '{{ val.vx.rundir }}/prewxvx/{{ prewxvx.lam.prewxvx.name }}'
+stageiv:
+  platform: !dict '{{ app.platform }}'
+  stageiv:
+    archive_url: https://data.gdex.ucar.edu/d507005/stage4/stage4.{yyyymm}.tar
+    cycles: !dict '{{ vx.common.wxvx.cycles }}'
+    execution:
+      batchargs:
+        cores: 1
+        export: false
+        partition: '{{ app.partitions.netaccess }}'
+        rundir: '{{ stageiv.stageiv.rundir }}'
+        walltime: '00:30:00'
+      envcmds: !list '{{ val.zarrs.envcmds }}'
+      executable: python -m eagle.data.stageiv stageiv.yaml
+    leadtimes:
+      start: 6
+      step: 6
+      stop: !int '{{ app.time.max_leadtime }}'
+    output_path: '{{ stageiv.stageiv.rundir }}/grib'
+    rundir: '{{ val.data.rundir }}/stageiv'
 training:
   anemoi:
     defaults:
@@ -495,6 +516,54 @@ vx:
           paths: !dict '{{ vx.common.paths_grid | replace("TRUTH", "grid2grid") | replace("EXTENT", "lam") }}'
           regrid: !dict '{{ vx.grid2grid.global.wxvx.wxvx.regrid }}'
           variables: !dict '{{ vx.common.wxvx.variables }}'
+    lam_precip:
+      platform: !dict '{{ app.platform }}'
+      wxvx:
+        execution:
+          batchargs:
+            cores: 1
+            export: false
+            partition: '{{ app.partitions.netaccess }}'
+            walltime: '00:30:00'
+            rundir: '{{ vx.grid2grid.lam_precip.wxvx.rundir }}'
+          envcmds: !list '{{ vx.common.execution.envcmds }}'
+          executable: wxvx -c wxvx-grid2grid-lam-precip.yaml -t plots -f
+        name: grid2grid-lam-precip
+        prewxvx:
+          <<: *prewxvx-lam
+        rundir: '{{ val.vx.rundir }}/grid2grid/lam-precip'
+        wxvx:
+          cycles: !dict '{{ vx.common.wxvx.cycles }}'
+          truth:
+            name: STAGEIV
+            type: grid
+            url: '{{ meta.stageiv }}/st4_conus.{{ yyyymmdd }}{{ hh }}.06h.grb2'
+          forecast:
+            coords: !dict '{{ vx.common.wxvx.forecast.coords }}'
+            name: nested_lam
+            path: '{{ meta.post_files }}/nested-lam.{{ yyyymmdd[:4] }}-{{ yyyymmdd[4:6] }}-{{ yyyymmdd[6:8] }}T{{ hh }}.{{ "%02d" % meta.max_leadtime }}h.nc'
+            projection:
+              a: 6371229
+              b: 6371229
+              lat_0: 38.5
+              lat_1: 38.5
+              lat_2: 38.5
+              lon_0: 262.5
+              proj: lcc
+          leadtimes: !dict '{{ stageiv.stageiv.leadtimes }}'
+          meta:
+            grids: '{{ val.vx.rundir }}/grid2grid/lam-precip/grids'
+            max_leadtime: !int '{{ app.time.max_leadtime }}'
+            post_files: '{{ val.vx.rundir }}/postprocessed_files/lam'
+            stageiv: '{{ val.data.rundir }}/stageiv/grib'
+            workdir: '{{ val.vx.rundir }}/grid2grid/lam-precip'
+          ncdiffs: !bool '{{ vx.grid2grid.global.wxvx.wxvx.ncdiffs }}'
+          paths: !dict '{{ vx.common.paths_grid | replace("TRUTH", "grid2grid") | replace("EXTENT", "lam-precip") }}'
+          regrid: !dict '{{ vx.grid2grid.global.wxvx.wxvx.regrid }}'
+          variables:
+            accum_tp:
+              level_type: surface
+              name: accum_tp
   grid2obs:
     global:
       wxvx:

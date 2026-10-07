@@ -21,6 +21,7 @@ grids_and_meshes:
   rundir: '{{ app.rundir }}/data'
 inference:
   checkpoint_dir: '{{ app.base }}/run/{{ app.experiment_name }}/training/outputs/checkpoint'
+stageiv: !remove
 training: !remove
 ufs2arco:
   mover:
@@ -60,6 +61,9 @@ val:
     - sh2
     - lsm
     - orog
+vx:
+  grid2grid:
+    lam_precip: !remove
 zarrs:
   common:
     execution:

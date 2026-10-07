@@ -51,6 +51,8 @@ wxvx Quick Tips
 ----------------------------------------------------
 
 * Use the ``vx-grid-*`` targets to verify against gridded analyses.
+* Use ``vx-grid-lam-precip`` to verify six-hour nested-LAM precipitation
+  against Stage IV after running the ``stageiv`` data target.
 * Use the ``vx-obs-*`` targets to verify against PrepBUFR observations.
 * The ``global`` and ``lam`` targets are independent, so they can be run in
   parallel.
@@ -60,12 +62,14 @@ wxvx Quick Tips
 Running Verification
 ~~~~~~~~~~~~~~~~~~~~~~
 
-EAGLE provides four standard verification targets:
+EAGLE provides five standard verification targets:
 
 .. code-block:: bash
 
+   make stageiv config=eagle.yaml
    make vx-grid-global config=eagle.yaml
    make vx-grid-lam config=eagle.yaml
+   make vx-grid-lam-precip config=eagle.yaml
    make vx-obs-global config=eagle.yaml
    make vx-obs-lam config=eagle.yaml
 
@@ -73,11 +77,13 @@ These commands submit batch jobs for:
 
 * ``grid-global``: global forecasts verified against gridded analyses
 * ``grid-lam``: limited-area forecasts verified against gridded analyses
+* ``grid-lam-precip``: limited-area precipitation verified against Stage IV
 * ``obs-global``: global forecasts verified against point observations
 * ``obs-lam``: limited-area forecasts verified against point observations
 
 Because these are separate jobs, they can be launched in quick succession to
-run in parallel.
+run in parallel, except that the ``stageiv`` job must complete before
+``vx-grid-lam-precip`` starts.
 
 
 Verification Output
@@ -89,6 +95,9 @@ the corresponding verification run directory:
 .. code-block:: text
 
    run/<expname>/vx/grid2{grid,obs}/{global,lam}/run/
+
+The precipitation-only output is under
+``run/<expname>/vx/grid2grid/lam-precip/run/``.
 
 The most useful outputs are:
 

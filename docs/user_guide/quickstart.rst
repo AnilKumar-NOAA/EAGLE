@@ -104,21 +104,36 @@ Building and Running :term:`EAGLE`
    .. _QuickstartVerification:
 
    .. code-block:: bash
-      
+
+      make stageiv config=eagle.yaml
       make vx-grid-global config=eagle.yaml
       make vx-grid-lam config=eagle.yaml
+      make vx-grid-lam-precip config=eagle.yaml
       make vx-obs-global config=eagle.yaml
       make vx-obs-lam config=eagle.yaml
 
    For running just the global verification run, only submit ``vx-grid-global`` and ``vx-obs-global``.
 
+   The ``stageiv`` target downloads the required monthly archive from NSF NCAR
+   GDEX and extracts native six-hour CONUS :term:`Stage IV` precipitation
+   fields. Wait for this batch job to finish before submitting
+   ``vx-grid-lam-precip``. Cached archives and extracted files are reused.
+
    Before running verification, the :term:`WXVX` driver will run ``prewxvx`` to prepare forecast output from the previous step. See the files ``run/<expname>/vx/prewxvx/{global,lam}/runscript.prewxvx-*.out`` for details.
    
-   These steps perform verification of the ``global`` or :term:`LAM` forecasts against gridded analyses (``*-grid-*``) or 
-   PrepBUFR observations (``*-obs-*``) as truth. Each submits a batch job, so the four ``make`` commands can be run in quick 
-   succession to get all the batch jobs running in parallel. When each batch job completes, MET ``.stat`` files and ``.png`` 
-   plot files can be found under the ``stats/`` and ``plots/`` subdirectories of ``run/<expname>/vx/grid2{grid,obs}/{global,lam}/run/``. 
+   These steps perform verification of the ``global`` or :term:`LAM` forecasts against gridded analyses (``*-grid-*``) or
+   PrepBUFR observations (``*-obs-*``) as truth. After Stage IV staging is
+   complete, the verification commands may be submitted in quick succession.
+   When each batch job completes, MET ``.stat`` files and ``.png`` plot files
+   can be found under the ``stats/`` and ``plots/`` subdirectories of
+   ``run/<expname>/vx/grid2{grid,obs}/{global,lam}/run/``.
    The files ``run/<expname>/vx/*.log`` contain the logs from each verification run.
+
+   The precipitation-only run verifies nested-LAM ``accum_tp`` against Stage IV
+   and writes CSI, HSS, and FSS plots under
+   ``run/<expname>/vx/grid2grid/lam-precip/run/plots``. Stage IV monthly archives
+   support retrospective verification; they are not intended for the NRT
+   workflow.
 
 #. Make additional :term:`visualization` outputs
 

@@ -153,6 +153,9 @@
     "prewxvx": {
       "type": "object"
     },
+    "stageiv": {
+      "type": "object"
+    },
     "training": {
       "type": "object"
     },
