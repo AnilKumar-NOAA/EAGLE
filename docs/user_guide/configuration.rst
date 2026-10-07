@@ -165,6 +165,19 @@ the source, transforms, and target settings needed by ``ufs2arco``. Downstream
 training and inference dataset paths must be updated to point to the resulting
 Zarr output.
 
+stageiv
+------------------------------------------------------------------------------
+
+Configuration for staging native six-hour CONUS Stage IV precipitation used by
+``vx-grid-lam-precip``. EAGLE derives valid times from ``cycles`` and
+``leadtimes``, downloads each required monthly NSF NCAR GDEX archive once, and
+extracts only the corresponding ``st4_conus.*.06h.grb2`` files. ``archive_url``
+must be an HTTPS template containing ``{yyyymm}``.
+
+The default archive is the `NSF NCAR GDEX NCEP Stage IV dataset
+<https://gdex.ucar.edu/datasets/d507005/dataaccess/>`__. The monthly archive is
+intended for retrospective verification rather than NRT execution.
+
 .. _ConfigRealization:
 
 Config Realization

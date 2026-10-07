@@ -2,7 +2,7 @@ BASHSRCS = $(wildcard ../.github/scripts/*) format setup
 HELPERS  = vx zarr
 MODULES  = data inference training visualization wxvx
 PACKAGE  = eagle
-STEPS    = data grids-and-meshes inference training vis-grid-global vis-grid-lam vis-obs-global vis-obs-lam vx-grid-global vx-grid-lam vx-obs-global vx-obs-lam
+STEPS    = data grids-and-meshes inference stageiv training vis-grid-global vis-grid-lam vis-obs-global vis-obs-lam vx-grid-global vx-grid-lam vx-grid-lam-precip vx-obs-global vx-obs-lam
 TOOLING  = config devenv env format lint realize shellcheck test typecheck unittest validate yamllint
 VERBOSE  = $(if $(filter undefined,$(origin DEBUG)),, --verbose)
 
@@ -96,6 +96,15 @@ shellcheck:
 	@echo "=> Checking shell scripts"
 	@(set -x && shellcheck --format=gcc --severity=info --shell=bash $(BASHSRCS))
 
+stageiv:
+	$(call activate,data)
+ifeq ($(task),?)
+	$(call tasklist,data,stageiv,StageIV)
+else
+	$(call check,$(config),config)
+	$(call exec,data,stageiv,StageIV,$(or $(task),run) --key-path stageiv --batch)
+endif
+
 test: lint shellcheck typecheck yamllint unittest
 
 training:
@@ -169,6 +178,9 @@ vx-grid-global:
 
 vx-grid-lam:
 	@$(make) vx truth=grid extent=lam
+
+vx-grid-lam-precip:
+	@$(make) vx truth=grid extent=lam_precip
 
 vx-obs-global:
 	@$(make) vx truth=obs extent=global

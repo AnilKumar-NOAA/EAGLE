@@ -61,6 +61,9 @@ Glossary
    PrepBUFR
       A BUFR-formatted observational dataset used for numerical weather prediction and forecast verification.
 
+   Stage IV
+      NOAA/NCEP gridded quantitative precipitation estimates produced from River Forecast Center mosaics and used as observational truth for CONUS precipitation verification.
+
    prewxvx
       The component used by EAGLE to prepare forecast output for :term:`wxvx` verification steps.
 

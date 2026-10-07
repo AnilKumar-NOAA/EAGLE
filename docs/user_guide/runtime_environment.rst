@@ -60,6 +60,10 @@ Run ``make`` with no arguments to list available targets.
      - Performs anemoi inference
      - training
      - anemoi
+   * - stageiv
+     - Stage six-hour CONUS Stage IV precipitation truth
+     - ---
+     - data
    * - vx-grid-global
      - Verify global against gridded analysis
      - inference
@@ -67,6 +71,10 @@ Run ``make`` with no arguments to list available targets.
    * - vx-grid-lam
      - Verify LAM against gridded analysis
      - inference
+     - wxvx
+   * - vx-grid-lam-precip
+     - Verify LAM precipitation against Stage IV
+     - inference, stageiv
      - wxvx
    * - vx-obs-global
      - Verify global against obs
