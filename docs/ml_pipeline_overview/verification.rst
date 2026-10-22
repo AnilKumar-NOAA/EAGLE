@@ -44,7 +44,7 @@ and :term:`LAM` forecasts against:
 
 Before running verification, the driver runs the ``prewxvx`` component from ``eagle-tools`` to postprocess forecast output from the previous step.
 
-See the `wxvx repository <https://github.com/maddenp-cu/wxvx>`_ for further
+See the `wxvx repository <https://github.com/NOAA-GSL/wxvx>`_ for further
 information about the project itself.
 
 wxvx Quick Tips
