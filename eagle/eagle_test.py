@@ -1,4 +1,7 @@
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+from uwtools.api.config import compose
 
 # Schema tests.
 
@@ -40,6 +43,29 @@ CONFIG: dict = {
     "vx": {},  # tested by eagle.wxvx
     "zarrs": {},  # needs expanded schema
 }
+
+ROOT = Path(__file__).parents[1]
+
+
+def test_nested_stageiv_config(tmp_path):
+    config = compose(
+        [
+            ROOT / "config" / "base.yaml",
+            ROOT / "config" / "nested.yaml",
+            ROOT / "config" / "ursa.yaml",
+        ],
+        realize=True,
+        output_file=tmp_path / "nested.yaml",
+    )
+
+    stageiv = config["vx"]["grid2stageiv"]["lam"]["wxvx"]
+
+    assert stageiv["name"] == "grid2stageiv-lam"
+    assert "accum_tp" in stageiv["prewxvx"]["eagle_tools"]["vars_of_interest"]
+    assert stageiv["wxvx"]["truth"]["name"] == "STAGEIV"
+    assert stageiv["wxvx"]["variables"] == {
+        "accum_tp": {"level_type": "surface", "name": "tp"}
+    }
 
 
 def test_top(logged, tmp_path, validator, with_del, with_set):

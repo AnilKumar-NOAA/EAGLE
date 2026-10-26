@@ -52,7 +52,8 @@ Precipitation Skill Scores
 
 The ``vx-stageiv-lam`` target verifies the LAM model's six-hour accumulated
 precipitation field, ``accum_tp``, as the canonical ``wxvx`` variable ``tp``.
-The truth source is the hourly Stage IV APCP analysis distributed by NOMADS.
+The default truth source is the hourly Stage IV APCP analysis distributed by
+NOMADS.
 For each forecast valid time, ``wxvx`` downloads the six hourly Stage IV files
 ending at that time and uses MET's ``pcp_combine`` to create the six-hour truth
 accumulation. MET's ``grid_stat`` then regrids Stage IV to the LAM forecast grid.
@@ -85,7 +86,7 @@ wxvx Quick Tips
 Running Verification
 ~~~~~~~~~~~~~~~~~~~~~~
 
-EAGLE provides five standard verification targets for a nested forecast:
+EAGLE provides the following standard verification targets:
 
 .. code-block:: bash
 
@@ -93,7 +94,7 @@ EAGLE provides five standard verification targets for a nested forecast:
    make vx-grid-lam config=eagle.yaml
    make vx-obs-global config=eagle.yaml
    make vx-obs-lam config=eagle.yaml
-   make vx-stageiv-lam config=eagle.yaml
+   make vx-stageiv-lam config=eagle.yaml  # for nested runs only
 
 These commands submit batch jobs for:
 

@@ -775,36 +775,6 @@ vx:
           paths: !dict '{{ vx.common.paths_grid | replace("TRUTH", "grid2grid") | replace("EXTENT", "lam") }}'
           regrid: !dict '{{ vx.grid2grid.global.wxvx.wxvx.regrid }}'
           variables: !dict '{{ vx.common.wxvx.variables }}'
-  grid2stageiv:
-    lam:
-      platform: !dict '{{ app.platform }}'
-      wxvx: # config for the EAGLE driver
-        execution:
-          batchargs:
-            cores: 1
-            export: false
-            partition: '{{ app.partitions.netaccess }}'
-            rundir: '{{ vx.grid2stageiv.lam.wxvx.rundir }}'
-            walltime: '00:30:00'
-          envcmds: !list '{{ vx.common.execution.envcmds }}'
-          executable: wxvx -c wxvx-grid2stageiv-lam.yaml -t plots -f
-        name: grid2stageiv-lam
-        prewxvx:
-          <<: *prewxvx-lam
-        rundir: '{{ val.vx.rundir }}/grid2stageiv/lam'
-        wxvx: # config for the wxvx application
-          cycles: !dict '{{ vx.common.wxvx.cycles }}'
-          truth:
-            name: STAGEIV
-            type: grid
-            url: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/pcpanl.{{ yyyymmdd }}/st4_conus.{{ yyyymmdd }}{{ hh }}.01h.grb2
-          forecast: !dict '{{ vx.grid2grid.lam.wxvx.wxvx.forecast }}'
-          leadtimes: !dict '{{ vx.common.wxvx.leadtimes }}'
-          meta: !dict '{{ vx.common.wxvx.meta | replace("TRUTH", "grid2stageiv") | replace("EXTENT", "lam") }}'
-          ncdiffs: !bool '{{ vx.grid2grid.global.wxvx.wxvx.ncdiffs }}'
-          paths: !dict '{{ vx.common.paths_grid | replace("TRUTH", "grid2stageiv") | replace("EXTENT", "lam") }}'
-          regrid: !dict '{{ vx.grid2grid.global.wxvx.wxvx.regrid }}'
-          variables: !dict '{{ vx.common.variables_stageiv }}'
   grid2obs:
     global:
       wxvx:
@@ -843,6 +813,36 @@ vx:
           paths: !dict '{{ vx.common.paths_obs | replace("TRUTH", "grid2obs") | replace("EXTENT", "lam") }}'
           regrid: !dict '{{ vx.grid2obs.global.wxvx.wxvx.regrid }}'
           variables: !dict '{{ vx.common.wxvx.variables }}'
+  grid2stageiv:
+    lam:
+      platform: !dict '{{ app.platform }}'
+      wxvx: # config for the EAGLE driver
+        execution:
+          batchargs:
+            cores: 1
+            export: false
+            partition: '{{ app.partitions.netaccess }}'
+            rundir: '{{ vx.grid2stageiv.lam.wxvx.rundir }}'
+            walltime: '00:30:00'
+          envcmds: !list '{{ vx.common.execution.envcmds }}'
+          executable: wxvx -c wxvx-grid2stageiv-lam.yaml -t plots -f
+        name: grid2stageiv-lam
+        prewxvx:
+          <<: *prewxvx-lam
+        rundir: '{{ val.vx.rundir }}/grid2stageiv/lam'
+        wxvx: # config for the wxvx application
+          cycles: !dict '{{ vx.common.wxvx.cycles }}'
+          truth:
+            name: STAGEIV
+            type: grid
+            url: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/pcpanl.{{ yyyymmdd }}/st4_conus.{{ yyyymmdd }}{{ hh }}.01h.grb2
+          forecast: !dict '{{ vx.grid2grid.lam.wxvx.wxvx.forecast }}'
+          leadtimes: !dict '{{ vx.common.wxvx.leadtimes }}'
+          meta: !dict '{{ vx.common.wxvx.meta | replace("TRUTH", "grid2stageiv") | replace("EXTENT", "lam") }}'
+          ncdiffs: !bool '{{ vx.grid2grid.global.wxvx.wxvx.ncdiffs }}'
+          paths: !dict '{{ vx.common.paths_grid | replace("TRUTH", "grid2stageiv") | replace("EXTENT", "lam") }}'
+          regrid: !dict '{{ vx.grid2grid.global.wxvx.wxvx.regrid }}'
+          variables: !dict '{{ vx.common.variables_stageiv }}'
 zarrs:
   hrrr:
     zarr:
