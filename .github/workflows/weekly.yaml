@@ -2,8 +2,8 @@ name: NRT EAGLE CI Pipeline Weekly
 
 on:
   schedule:
-    # Runs every Saturday at 06:00 UTC
-    - cron: '0 6 * * 6'
+    # Runs every Tuesday at 06:00 UTC
+    - cron: '0 6 * * 2'
 
 permissions:
   contents: read
@@ -19,6 +19,7 @@ jobs:
       queue: max
     name: Clean old conda installs
     runs-on: ursa
+    environment: autonomous
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -34,7 +35,7 @@ jobs:
     runs-on: ursa
     timeout-minutes: 1440
     environment:
-      name: eagle-ursa
+      name: autonomous
 
     steps:
 
@@ -52,6 +53,7 @@ jobs:
         env:
           INSTALLDIR: conda
           PR_NUM: 99999
+          SHA: ${{ github.sha }}
         run: .github/scripts/nested-eagle
     
       - name: Send Slack Notification
