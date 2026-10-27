@@ -2,8 +2,8 @@ name: NRT EAGLE CI Pipeline Weekly
 
 on:
   schedule:
-    # Runs every Tuesday at 06:00 UTC
-    - cron: '0 6 * * 2'
+    # Runs every Saturday at 06:00 UTC
+    - cron: '0 6 * * 6'
 
 permissions:
   contents: read
@@ -64,5 +64,5 @@ jobs:
           payload: |
             {
               "channel": "C0C7AJ84X3P", 
-              "text": ":spack: *${{ github.workflow }}* completed on *${{ matrix.runner }}* with status: *${{ job.status }}* }}"
-
+              "text": ":eagle: *${{ github.workflow }}* completed on *${{ runner.name }}* with status: *${{ job.status }}*"
+            }
